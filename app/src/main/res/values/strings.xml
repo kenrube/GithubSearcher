@@ -1,2 +1,8 @@
 <resources>
+
+    <!-- Fonts -->
+    <string name="roboto.regular">sans-serif</string>
+    <string name="roboto.light">sans-serif-light</string>
+    <string name="roboto.medium">sans-serif-medium</string>
+
 </resources>

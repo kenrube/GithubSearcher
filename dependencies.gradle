@@ -25,6 +25,8 @@ ext.versions = [
 
         glide                   : '3.7.0',
 
+        timber                  : '4.1.2',
+
         junit                   : '4.12',
 ]
 
@@ -53,12 +55,14 @@ ext.libraries = [
 
         glide                    : "com.github.bumptech.glide:glide:$versions.glide",
 
+        timber                   : "com.jakewharton.timber:timber:$versions.timber",
+
         // Test tools
         junit                    : "junit:junit:$versions.junit",
 ]
 
 ext.urls = [
-        base : "\"https://developer.github.com/v3\"",
+        base : "\"https://api.github.com\"",
 ]
 
 ext.resVals = [
