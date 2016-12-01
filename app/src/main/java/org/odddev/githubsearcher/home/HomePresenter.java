@@ -35,6 +35,8 @@ public class HomePresenter extends Presenter<IHomeView> {
 
     public HomePresenter() {
         Injector.getAppComponent().inject(this);
+
+        keyword = "Tetris";
     }
 
     @Override
@@ -48,7 +50,7 @@ public class HomePresenter extends Presenter<IHomeView> {
         }
     }
 
-    public void getRepos(String keyword) {
+    void getRepos(String keyword) {
         this.keyword = keyword;
 
         getReposSubscription = provider.getRepos(keyword)

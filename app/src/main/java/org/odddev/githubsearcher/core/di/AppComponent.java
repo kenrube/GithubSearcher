@@ -20,6 +20,7 @@ import dagger.Component;
         ProvidersModule.class,
         PresentersModule.class,
         NetworkModule.class,
+        AdaptersModule.class
 })
 public interface AppComponent {
 

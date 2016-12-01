@@ -1,11 +1,9 @@
 package org.odddev.githubsearcher.core.utils;
 
 import android.databinding.BindingAdapter;
-import android.databinding.BindingConversion;
 import android.graphics.Typeface;
 import android.graphics.drawable.Drawable;
 import android.os.Build;
-import android.view.View;
 import android.widget.ImageView;
 import android.widget.TextView;
 
@@ -47,10 +45,5 @@ public class BindingUtils {
         } else {
             textView.setTypeface(Typeface.create(fontName, Typeface.NORMAL));
         }
-    }
-
-    @BindingConversion
-    public static int convertConditionToVisibility(final boolean condition) {
-        return condition ? View.VISIBLE : View.GONE;
     }
 }
