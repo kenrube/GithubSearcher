@@ -1,7 +1,7 @@
 package org.odddev.githubsearcher.core.rx;
 
-import rx.Observable;
 import rx.Scheduler;
+import rx.Single;
 import rx.android.schedulers.AndroidSchedulers;
 import rx.schedulers.Schedulers;
 
@@ -23,8 +23,8 @@ public class SchedulersResolver implements ISchedulersResolver {
     }
 
     @Override
-    public <T> Observable.Transformer<T, T> applyDefaultSchedulers() {
-        return observable -> observable
+    public <T> Single.Transformer<T, T> applyDefaultSchedulers() {
+        return single -> single
                 .subscribeOn(ioScheduler())
                 .observeOn(mainThreadScheduler());
     }

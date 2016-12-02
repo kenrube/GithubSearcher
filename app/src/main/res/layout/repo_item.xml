@@ -24,7 +24,7 @@
             app:isCircle="@{true}"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent"
-            app:placeholder="@{@drawable/ic_github_logo}"
+            app:placeholder="@{@drawable/ic_github_black_24dp}"
             app:srcUri="@{repo.owner.avatarUrl}"
             tools:ignore="ContentDescription"/>
 

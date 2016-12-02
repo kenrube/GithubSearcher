@@ -41,8 +41,6 @@ public class HomePresenter extends Presenter<IHomeView> {
     protected void onViewAttached(@NonNull IHomeView view) {
         super.onViewAttached(view);
 
-        showKeyword(keyword);
-
         if (repos != null) {
             showRepos(repos);
         } else if (!TextUtils.isEmpty(keyword)) {
@@ -53,9 +51,7 @@ public class HomePresenter extends Presenter<IHomeView> {
     void getRepos(String keyword) {
         this.keyword = keyword;
 
-        if (getReposSubscription != null && !getReposSubscription.isUnsubscribed()) {
-            getReposSubscription.unsubscribe();
-        }
+        cancelPreviousRequest();
 
         getReposSubscription = provider.getRepos(keyword)
                 .subscribe(
@@ -67,14 +63,13 @@ public class HomePresenter extends Presenter<IHomeView> {
                             Timber.e(throwable, throwable.getLocalizedMessage());
                             showError(throwable.getLocalizedMessage());
                             compositeSubscription.remove(getReposSubscription);
-                        },
-                        () -> compositeSubscription.remove(getReposSubscription));
+                        });
         compositeSubscription.add(getReposSubscription);
     }
 
-    private void showKeyword(String keyword) {
-        for (IHomeView view : getViews()) {
-            view.showKeyword(keyword);
+    private void cancelPreviousRequest() {
+        if (getReposSubscription != null && !getReposSubscription.isUnsubscribed()) {
+            getReposSubscription.unsubscribe();
         }
     }
 

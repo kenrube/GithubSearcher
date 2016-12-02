@@ -286,6 +286,10 @@ public class Repo {
     @Expose
     private float score;
 
+    public int getId() {
+        return id;
+    }
+
     public String getFullName() {
         return fullName;
     }
@@ -296,5 +300,17 @@ public class Repo {
 
     public String getDescription() {
         return description;
+    }
+
+    public int getSize() {
+        return size;
+    }
+
+    public int getStargazersCount() {
+        return stargazersCount;
+    }
+
+    public int getForksCount() {
+        return forksCount;
     }
 }

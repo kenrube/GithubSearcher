@@ -4,7 +4,7 @@ import org.odddev.githubsearcher.home.repo.Repo;
 
 import java.util.List;
 
-import rx.Observable;
+import rx.Single;
 
 /**
  * @author kenrube
@@ -13,5 +13,5 @@ import rx.Observable;
 
 public interface IHomeProvider {
 
-    Observable<List<Repo>> getRepos(String keyword);
+    Single<List<Repo>> getRepos(String keyword);
 }

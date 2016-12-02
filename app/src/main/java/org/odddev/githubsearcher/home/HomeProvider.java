@@ -13,7 +13,7 @@ import java.util.List;
 
 import javax.inject.Inject;
 
-import rx.Observable;
+import rx.Single;
 
 /**
  * @author kenrube
@@ -33,9 +33,9 @@ public class HomeProvider implements IHomeProvider {
     }
 
     @Override
-    public Observable<List<Repo>> getRepos(String keyword) {
+    public Single<List<Repo>> getRepos(String keyword) {
         if (TextUtils.isEmpty(keyword)) {
-            return Observable.just(new ArrayList<>());
+            return Single.just(new ArrayList<>());
         } else {
             return serverApi.getRepos(keyword)
                     .map(ReposResponse::getRepos)

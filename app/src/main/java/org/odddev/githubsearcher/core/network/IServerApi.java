@@ -4,7 +4,7 @@ import org.odddev.githubsearcher.home.repo.ReposResponse;
 
 import retrofit2.http.GET;
 import retrofit2.http.Query;
-import rx.Observable;
+import rx.Single;
 
 /**
  * @author kenrube
@@ -14,5 +14,5 @@ import rx.Observable;
 public interface IServerApi {
 
     @GET("/search/repositories")
-    Observable<ReposResponse> getRepos(@Query("q") String keyword);
+    Single<ReposResponse> getRepos(@Query("q") String keyword);
 }

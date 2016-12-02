@@ -8,12 +8,14 @@ import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.SearchView;
+import android.support.v7.widget.helper.ItemTouchHelper;
 import android.text.TextUtils;
 import android.view.Menu;
 import android.view.MenuItem;
 
 import org.odddev.githubsearcher.R;
 import org.odddev.githubsearcher.core.di.Injector;
+import org.odddev.githubsearcher.core.utils.TouchHelper;
 import org.odddev.githubsearcher.databinding.HomeActivityBinding;
 import org.odddev.githubsearcher.home.repo.Repo;
 import org.odddev.githubsearcher.home.repo.ReposAdapter;
@@ -22,10 +24,13 @@ import java.util.List;
 
 import javax.inject.Inject;
 
-public class HomeActivity extends AppCompatActivity implements IHomeView {
+public class HomeActivity extends AppCompatActivity implements IHomeView, TouchHelper.Callback {
+
+    private static final String KEYWORD_KEY = "KEYWORD_KEY";
 
     private HomeActivityBinding binding;
 
+    private SearchView searchView;
     private String searchKeyword;
 
     @Inject
@@ -41,6 +46,10 @@ public class HomeActivity extends AppCompatActivity implements IHomeView {
         Injector.getAppComponent().inject(this);
 
         binding = DataBindingUtil.setContentView(this, R.layout.home_activity);
+
+        if (savedInstanceState != null) {
+            searchKeyword = savedInstanceState.getString(KEYWORD_KEY);
+        }
 
         initToolbar();
         initRecyclerView();
@@ -62,8 +71,8 @@ public class HomeActivity extends AppCompatActivity implements IHomeView {
     public boolean onCreateOptionsMenu(Menu menu) {
         getMenuInflater().inflate(R.menu.search, menu);
 
-        final MenuItem searchItem = menu.findItem(R.id.action_search);
-        final SearchView searchView = (SearchView) MenuItemCompat.getActionView(searchItem);
+        MenuItem searchItem = menu.findItem(R.id.action_search);
+        searchView = (SearchView) MenuItemCompat.getActionView(searchItem);
 
         searchView.setOnQueryTextListener(queryTextListener);
 
@@ -74,6 +83,12 @@ public class HomeActivity extends AppCompatActivity implements IHomeView {
         }
 
         return super.onCreateOptionsMenu(menu);
+    }
+
+    @Override
+    protected void onSaveInstanceState(Bundle outState) {
+        super.onSaveInstanceState(outState);
+        outState.putString(KEYWORD_KEY, searchView.getQuery().toString());
     }
 
     private void initToolbar() {
@@ -90,11 +105,20 @@ public class HomeActivity extends AppCompatActivity implements IHomeView {
         binding.repos.setLayoutManager(
                 new LinearLayoutManager(this, LinearLayoutManager.VERTICAL, false));
         binding.repos.setAdapter(adapter);
+
+        ItemTouchHelper.Callback callback = new TouchHelper(this);
+        ItemTouchHelper helper = new ItemTouchHelper(callback);
+        helper.attachToRecyclerView(binding.repos);
     }
 
     @Override
-    public void showKeyword(String keyword) {
-        searchKeyword = keyword;
+    public void onMove(int fromPosition, int toPosition) {
+        adapter.swapRepos(fromPosition, toPosition);
+    }
+
+    @Override
+    public void onSwiped(int position) {
+        adapter.removeRepo(position);
     }
 
     @Override

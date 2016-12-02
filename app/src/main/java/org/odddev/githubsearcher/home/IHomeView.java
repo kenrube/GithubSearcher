@@ -12,8 +12,6 @@ import java.util.List;
 
 interface IHomeView extends IView {
 
-    void showKeyword(String keyword);
-
     void showRepos(List<Repo> repos);
 
     void showError(String error);

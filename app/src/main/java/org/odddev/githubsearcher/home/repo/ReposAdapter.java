@@ -1,6 +1,7 @@
 package org.odddev.githubsearcher.home.repo;
 
 import android.databinding.DataBindingUtil;
+import android.support.v7.util.DiffUtil;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.ViewGroup;
@@ -9,6 +10,7 @@ import org.odddev.githubsearcher.R;
 import org.odddev.githubsearcher.databinding.RepoItemBinding;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 
 /**
@@ -41,13 +43,33 @@ public class ReposAdapter extends RecyclerView.Adapter<ReposAdapter.RepoViewHold
     }
 
     public void setRepos(List<Repo> repos) {
+        ReposDiffCallback diffCallback = new ReposDiffCallback(this.repos, repos);
+        DiffUtil.DiffResult diffResult = DiffUtil.calculateDiff(diffCallback);
+
         this.repos = repos;
-        notifyDataSetChanged();
+        diffResult.dispatchUpdatesTo(this);
     }
 
     public void addRepos(List<Repo> repos) {
-        this.repos.addAll(repos);
-        notifyItemRangeInserted(this.repos.size(), repos.size());
+        List<Repo> temp = new ArrayList<>();
+        temp.addAll(this.repos);
+        temp.addAll(repos);
+
+        ReposDiffCallback diffCallback = new ReposDiffCallback(this.repos, temp);
+        DiffUtil.DiffResult diffResult = DiffUtil.calculateDiff(diffCallback);
+
+        this.repos = temp;
+        diffResult.dispatchUpdatesTo(this);
+    }
+
+    public void swapRepos(int fromPosition, int toPosition) {
+        Collections.swap(repos, fromPosition, toPosition);
+        notifyItemMoved(fromPosition, toPosition);
+    }
+
+    public void removeRepo(int position) {
+        repos.remove(position);
+        notifyItemRemoved(position);
     }
 
     class RepoViewHolder extends RecyclerView.ViewHolder {
