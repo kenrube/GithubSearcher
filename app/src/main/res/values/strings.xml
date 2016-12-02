@@ -5,4 +5,7 @@
     <string name="roboto.light">sans-serif-light</string>
     <string name="roboto.medium">sans-serif-medium</string>
 
+    <!-- Home -->
+    <string name="home.action.search">Поиск</string>
+
 </resources>

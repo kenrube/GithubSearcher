@@ -35,13 +35,13 @@ public class HomePresenter extends Presenter<IHomeView> {
 
     public HomePresenter() {
         Injector.getAppComponent().inject(this);
-
-        keyword = "Tetris";
     }
 
     @Override
     protected void onViewAttached(@NonNull IHomeView view) {
         super.onViewAttached(view);
+
+        showKeyword(keyword);
 
         if (repos != null) {
             showRepos(repos);
@@ -52,6 +52,10 @@ public class HomePresenter extends Presenter<IHomeView> {
 
     void getRepos(String keyword) {
         this.keyword = keyword;
+
+        if (getReposSubscription != null && !getReposSubscription.isUnsubscribed()) {
+            getReposSubscription.unsubscribe();
+        }
 
         getReposSubscription = provider.getRepos(keyword)
                 .subscribe(
@@ -68,6 +72,12 @@ public class HomePresenter extends Presenter<IHomeView> {
         compositeSubscription.add(getReposSubscription);
     }
 
+    private void showKeyword(String keyword) {
+        for (IHomeView view : getViews()) {
+            view.showKeyword(keyword);
+        }
+    }
+
     private void showRepos(List<Repo> repos) {
         for (IHomeView view : getViews()) {
             view.showRepos(repos);
@@ -78,5 +88,10 @@ public class HomePresenter extends Presenter<IHomeView> {
         for (IHomeView view : getViews()) {
             view.showError(error);
         }
+    }
+
+    @Override
+    protected void onDestroy() {
+        compositeSubscription.unsubscribe();
     }
 }

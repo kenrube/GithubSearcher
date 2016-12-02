@@ -35,4 +35,7 @@ public abstract class Presenter<View extends IView> {
 
     protected void onViewDetached(@NonNull View view) {
     }
+
+    protected void onDestroy() {
+    }
 }
