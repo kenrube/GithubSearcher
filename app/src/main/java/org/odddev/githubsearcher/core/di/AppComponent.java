@@ -1,5 +1,6 @@
 package org.odddev.githubsearcher.core.di;
 
+import org.odddev.githubsearcher.core.network.ConnectReceiver;
 import org.odddev.githubsearcher.core.network.NetworkModule;
 import org.odddev.githubsearcher.home.HomeActivity;
 import org.odddev.githubsearcher.home.HomePresenter;
@@ -24,9 +25,11 @@ import dagger.Component;
 })
 public interface AppComponent {
 
-    void inject(HomeProvider homeProvider);
+    void inject(HomeActivity homeActivity);
 
     void inject(HomePresenter homePresenter);
 
-    void inject(HomeActivity homeActivity);
+    void inject(HomeProvider homeProvider);
+
+    void inject(ConnectReceiver connectReceiver);
 }

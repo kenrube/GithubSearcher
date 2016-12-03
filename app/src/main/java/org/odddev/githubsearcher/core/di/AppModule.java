@@ -3,6 +3,7 @@ package org.odddev.githubsearcher.core.di;
 import android.content.Context;
 import android.support.annotation.NonNull;
 
+import org.odddev.githubsearcher.core.eventBus.RxEventBus;
 import org.odddev.githubsearcher.core.rx.ISchedulersResolver;
 import org.odddev.githubsearcher.core.rx.SchedulersResolver;
 
@@ -33,5 +34,10 @@ public class AppModule {
     @Provides @NonNull @Singleton
     ISchedulersResolver provideSchedulersResolver() {
         return new SchedulersResolver();
+    }
+
+    @Provides @NonNull @Singleton
+    RxEventBus provideEventBus() {
+        return new RxEventBus();
     }
 }

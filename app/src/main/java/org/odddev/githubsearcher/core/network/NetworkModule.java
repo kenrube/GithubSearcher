@@ -46,6 +46,8 @@ public class NetworkModule {
         loggingInterceptor.setLevel(HttpLoggingInterceptor.Level.BODY);
         okHttpBuilder.addInterceptor(loggingInterceptor);
 
+        okHttpBuilder.addInterceptor(new ResponseInterceptor());
+
         return okHttpBuilder.build();
     }
 

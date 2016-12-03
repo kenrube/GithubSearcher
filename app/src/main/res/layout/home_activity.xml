@@ -3,6 +3,16 @@
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto">
 
+    <data>
+
+        <import type="org.odddev.githubsearcher.core.state.ListViewState"/>
+
+        <variable
+            name="listViewState"
+            type="int"/>
+
+    </data>
+
     <android.support.design.widget.CoordinatorLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent">
@@ -28,6 +38,22 @@
             android:layout_marginLeft="@dimen/spacing_medium"
             android:layout_marginRight="@dimen/spacing_medium"
             app:layout_behavior="@string/appbar_scrolling_view_behavior"/>
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:text="@string/home.search.empty"
+            android:gravity="center"
+            app:font="@{@string/roboto_medium}"
+            android:textSize="@dimen/text_medium"
+            android:visibility="@{listViewState == ListViewState.EMPTY}"/>
+
+        <ProgressBar
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:visibility="@{listViewState == ListViewState.LOADING}"/>
 
     </android.support.design.widget.CoordinatorLayout>
 

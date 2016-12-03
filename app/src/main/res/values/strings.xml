@@ -7,5 +7,10 @@
 
     <!-- Home -->
     <string name="home.action.search">Поиск</string>
+    <string name="home.search.empty">Как пуст сей свод!\nНачните ввод</string>
+    <string name="home.connection.on">Включить</string>
+
+    <!-- Errors -->
+    <string name="error.connection">Нет подключения к Интернету</string>
 
 </resources>

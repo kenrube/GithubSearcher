@@ -4,9 +4,13 @@ import android.support.annotation.NonNull;
 import android.text.TextUtils;
 
 import org.odddev.githubsearcher.core.di.Injector;
+import org.odddev.githubsearcher.core.eventBus.RxEventBus;
 import org.odddev.githubsearcher.core.layers.presenter.Presenter;
+import org.odddev.githubsearcher.core.network.ConnectedEvent;
+import org.odddev.githubsearcher.core.network.UnprocessableEntityException;
 import org.odddev.githubsearcher.home.repo.Repo;
 
+import java.net.UnknownHostException;
 import java.util.List;
 
 import javax.inject.Inject;
@@ -33,8 +37,13 @@ public class HomePresenter extends Presenter<IHomeView> {
     @Inject
     CompositeSubscription compositeSubscription;
 
+    @Inject
+    RxEventBus eventBus;
+
     public HomePresenter() {
         Injector.getAppComponent().inject(this);
+
+        eventBus.subscribe(ConnectedEvent.class, event -> showConnected());
     }
 
     @Override
@@ -61,7 +70,13 @@ public class HomePresenter extends Presenter<IHomeView> {
                         },
                         throwable -> {
                             Timber.e(throwable, throwable.getLocalizedMessage());
-                            showError(throwable.getLocalizedMessage());
+                            if (throwable instanceof UnknownHostException) {
+                                showConnectionError();
+                            } else if (throwable instanceof UnprocessableEntityException) {
+                                showIncorrectInputError();
+                            } else {
+                                showError(throwable.getLocalizedMessage());
+                            }
                             compositeSubscription.remove(getReposSubscription);
                         });
         compositeSubscription.add(getReposSubscription);
@@ -76,6 +91,24 @@ public class HomePresenter extends Presenter<IHomeView> {
     private void showRepos(List<Repo> repos) {
         for (IHomeView view : getViews()) {
             view.showRepos(repos);
+        }
+    }
+
+    private void showConnectionError() {
+        for (IHomeView view : getViews()) {
+            view.showConnectionError();
+        }
+    }
+
+    private void showConnected() {
+        for (IHomeView view : getViews()) {
+            view.showConnected();
+        }
+    }
+
+    private void showIncorrectInputError() {
+        for (IHomeView view : getViews()) {
+            view.showIncorrectInputError();
         }
     }
 

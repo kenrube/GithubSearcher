@@ -14,5 +14,11 @@ interface IHomeView extends IView {
 
     void showRepos(List<Repo> repos);
 
+    void showConnectionError();
+
+    void showConnected();
+
+    void showIncorrectInputError();
+
     void showError(String error);
 }
