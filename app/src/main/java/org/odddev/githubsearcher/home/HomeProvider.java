@@ -30,8 +30,8 @@ public class HomeProvider implements IHomeProvider {
     }
 
     @Override
-    public Single<List<Repo>> getRepos(String keyword) {
-        return serverApi.getRepos(keyword)
+    public Single<List<Repo>> getRepos(String keyword, int page) {
+        return serverApi.getRepos(keyword, page)
                 .map(ReposResponse::getRepos)
                 .compose(schedulersResolver.applyDefaultSchedulers());
     }

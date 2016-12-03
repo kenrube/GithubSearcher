@@ -26,8 +26,11 @@ import timber.log.Timber;
 
 public class HomePresenter extends Presenter<IHomeView> {
 
+    static final int FIRST_PAGE = 1;
+
     private List<Repo> repos;
     private String keyword;
+    private int page;
 
     private Subscription getReposSubscription;
 
@@ -53,20 +56,25 @@ public class HomePresenter extends Presenter<IHomeView> {
         if (repos != null) {
             showRepos(repos);
         } else if (!TextUtils.isEmpty(keyword)) {
-            getRepos(keyword);
+            getRepos(keyword, FIRST_PAGE);
         }
     }
 
-    void getRepos(String keyword) {
+    void getRepos(String keyword, int page) {
         this.keyword = keyword;
+        this.page = page;
 
         cancelPreviousRequest();
 
-        getReposSubscription = provider.getRepos(keyword)
+        getReposSubscription = provider.getRepos(keyword, page)
                 .subscribe(
                         repos -> {
                             this.repos = repos;
-                            showRepos(repos);
+                            if (page == FIRST_PAGE) {
+                                showRepos(repos);
+                            } else {
+                                showMoreRepos(repos);
+                            }
                         },
                         throwable -> {
                             Timber.e(throwable, throwable.getLocalizedMessage());
@@ -82,6 +90,10 @@ public class HomePresenter extends Presenter<IHomeView> {
         compositeSubscription.add(getReposSubscription);
     }
 
+    void getRepos(String keyword) {
+        getRepos(keyword, page);
+    }
+
     private void cancelPreviousRequest() {
         if (getReposSubscription != null && !getReposSubscription.isUnsubscribed()) {
             getReposSubscription.unsubscribe();
@@ -91,6 +103,12 @@ public class HomePresenter extends Presenter<IHomeView> {
     private void showRepos(List<Repo> repos) {
         for (IHomeView view : getViews()) {
             view.showRepos(repos);
+        }
+    }
+
+    private void showMoreRepos(List<Repo> repos) {
+        for (IHomeView view : getViews()) {
+            view.showMoreRepos(repos);
         }
     }
 

@@ -41,8 +41,10 @@ public class NetworkModule {
     OkHttpClient provideOkHttpClient() {
         final OkHttpClient.Builder okHttpBuilder = new OkHttpClient.Builder();
 
-        HttpLoggingInterceptor loggingInterceptor = new HttpLoggingInterceptor(
-                message -> Timber.tag(HTTP_LOG_TAG).d(message));
+        okHttpBuilder.addInterceptor(new HeaderInterceptor());
+
+        HttpLoggingInterceptor loggingInterceptor = new HttpLoggingInterceptor(message ->
+                Timber.tag(HTTP_LOG_TAG).d(message));
         loggingInterceptor.setLevel(HttpLoggingInterceptor.Level.BODY);
         okHttpBuilder.addInterceptor(loggingInterceptor);
 

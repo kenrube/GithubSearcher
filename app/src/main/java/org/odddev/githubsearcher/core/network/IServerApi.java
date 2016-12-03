@@ -14,5 +14,7 @@ import rx.Single;
 public interface IServerApi {
 
     @GET("/search/repositories")
-    Single<ReposResponse> getRepos(@Query("q") String keyword);
+    Single<ReposResponse> getRepos(
+            @Query("q") String keyword,
+            @Query("page") int page);
 }

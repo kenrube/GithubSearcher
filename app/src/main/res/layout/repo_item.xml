@@ -30,7 +30,7 @@
 
         <TextView
             android:id="@+id/repo_name"
-            android:layout_width="wrap_content"
+            android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_marginLeft="@dimen/spacing_large"
             android:layout_marginStart="@dimen/spacing_large"
@@ -41,10 +41,11 @@
             android:textSize="@dimen/text_medium"
             app:font="@{@string/roboto_medium}"
             app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintTop_toTopOf="parent"/>
 
         <TextView
-            android:layout_width="wrap_content"
+            android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_marginLeft="@dimen/spacing_large"
             android:layout_marginStart="@dimen/spacing_large"
@@ -54,6 +55,7 @@
             android:textSize="@dimen/text_medial"
             app:font="@{@string/roboto_regular}"
             app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintTop_toBottomOf="@id/repo_name"/>
 
     </android.support.constraint.ConstraintLayout>

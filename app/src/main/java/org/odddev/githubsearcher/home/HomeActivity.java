@@ -17,6 +17,7 @@ import android.view.MenuItem;
 import org.odddev.githubsearcher.R;
 import org.odddev.githubsearcher.core.di.Injector;
 import org.odddev.githubsearcher.core.state.ListViewState;
+import org.odddev.githubsearcher.core.utils.EndlessScrollListener;
 import org.odddev.githubsearcher.core.utils.TouchHelper;
 import org.odddev.githubsearcher.databinding.HomeActivityBinding;
 import org.odddev.githubsearcher.home.repo.Repo;
@@ -80,13 +81,13 @@ public class HomeActivity extends AppCompatActivity implements IHomeView, TouchH
         MenuItem searchItem = menu.findItem(R.id.action_search);
         searchView = (SearchView) MenuItemCompat.getActionView(searchItem);
 
-        searchView.setOnQueryTextListener(queryTextListener);
-
         if (!TextUtils.isEmpty(searchKeyword)) {
             searchItem.expandActionView();
-            searchView.setQuery(searchKeyword, true);
+            searchView.setQuery(searchKeyword, false);
             searchView.clearFocus();
         }
+
+        searchView.setOnQueryTextListener(queryTextListener);
 
         return super.onCreateOptionsMenu(menu);
     }
@@ -107,14 +108,25 @@ public class HomeActivity extends AppCompatActivity implements IHomeView, TouchH
     }
 
     private void initRecyclerView() {
+        LinearLayoutManager layoutManager = new LinearLayoutManager(this,
+                LinearLayoutManager.VERTICAL, false);
         binding.repos.setHasFixedSize(true);
-        binding.repos.setLayoutManager(
-                new LinearLayoutManager(this, LinearLayoutManager.VERTICAL, false));
+        binding.repos.setLayoutManager(layoutManager);
         binding.repos.setAdapter(adapter);
+
+        binding.repos.addOnScrollListener(new EndlessScrollListener(layoutManager, page ->
+                getRepos(searchKeyword, page)));
 
         ItemTouchHelper.Callback callback = new TouchHelper(this);
         ItemTouchHelper helper = new ItemTouchHelper(callback);
         helper.attachToRecyclerView(binding.repos);
+    }
+
+    private void getRepos(String searchKeyword, int page) {
+        if (adapter.getItemCount() == 0) {
+            binding.setListViewState(ListViewState.LOADING);
+        }
+        presenter.getRepos(searchKeyword, page);
     }
 
     private void getRepos(String searchKeyword) {
@@ -138,6 +150,12 @@ public class HomeActivity extends AppCompatActivity implements IHomeView, TouchH
     public void showRepos(List<Repo> repos) {
         binding.setListViewState(ListViewState.FILLED);
         adapter.setRepos(repos);
+    }
+
+    @Override
+    public void showMoreRepos(List<Repo> repos) {
+        binding.setListViewState(ListViewState.FILLED);
+        adapter.addRepos(repos);
     }
 
     @Override
@@ -180,7 +198,7 @@ public class HomeActivity extends AppCompatActivity implements IHomeView, TouchH
         @Override
         public boolean onQueryTextChange(String newText) {
             searchKeyword = newText;
-            getRepos(searchKeyword);
+            getRepos(searchKeyword, HomePresenter.FIRST_PAGE);
             return true;
         }
     };

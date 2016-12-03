@@ -13,5 +13,5 @@ import rx.Single;
 
 public interface IHomeProvider {
 
-    Single<List<Repo>> getRepos(String keyword);
+    Single<List<Repo>> getRepos(String keyword, int page);
 }
