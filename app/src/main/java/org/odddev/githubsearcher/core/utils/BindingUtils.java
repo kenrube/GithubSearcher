@@ -64,7 +64,7 @@ public class BindingUtils {
         layoutParams.bottomMargin += (int) (fab.getHeight() * fromYDelta);
         fab.setLayoutParams(layoutParams);
 
-        fab.setClickable(fromXDelta >= 0);
+        fab.setClickable(fromXDelta + fromYDelta >= 0);
     }
 
     @BindingConversion
