@@ -13,6 +13,8 @@ import android.support.v7.widget.helper.ItemTouchHelper;
 import android.text.TextUtils;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.animation.Animation;
+import android.view.animation.AnimationUtils;
 
 import org.odddev.githubsearcher.R;
 import org.odddev.githubsearcher.core.di.Injector;
@@ -22,15 +24,24 @@ import org.odddev.githubsearcher.core.utils.TouchHelper;
 import org.odddev.githubsearcher.databinding.HomeActivityBinding;
 import org.odddev.githubsearcher.home.repo.Repo;
 import org.odddev.githubsearcher.home.repo.ReposAdapter;
+import org.odddev.githubsearcher.home.repo.SortOption;
 
 import java.util.ArrayList;
 import java.util.List;
 
 import javax.inject.Inject;
 
-public class HomeActivity extends AppCompatActivity implements IHomeView, TouchHelper.Callback {
+public class HomeActivity extends AppCompatActivity implements IHomeView, IHomeActionsHandler,
+        TouchHelper.Callback {
 
     private static final String KEYWORD_KEY = "KEYWORD_KEY";
+
+    private static Animation SHOW_SIZE_FAB;
+    private static Animation HIDE_SIZE_FAB;
+    private static Animation SHOW_FORKS_FAB;
+    private static Animation HIDE_FORKS_FAB;
+    private static Animation SHOW_STARS_FAB;
+    private static Animation HIDE_STARS_FAB;
 
     private HomeActivityBinding binding;
 
@@ -38,6 +49,8 @@ public class HomeActivity extends AppCompatActivity implements IHomeView, TouchH
 
     private SearchView searchView;
     private String searchKeyword;
+
+    private boolean fabExpanded;
 
     @Inject
     HomePresenter presenter;
@@ -51,12 +64,21 @@ public class HomeActivity extends AppCompatActivity implements IHomeView, TouchH
 
         Injector.getAppComponent().inject(this);
 
+        SHOW_SIZE_FAB = AnimationUtils.loadAnimation(this, R.anim.show_size_fab);
+        HIDE_SIZE_FAB = AnimationUtils.loadAnimation(this, R.anim.hide_size_fab);
+        SHOW_FORKS_FAB = AnimationUtils.loadAnimation(this, R.anim.show_forks_fab);
+        HIDE_FORKS_FAB = AnimationUtils.loadAnimation(this, R.anim.hide_forks_fab);
+        SHOW_STARS_FAB = AnimationUtils.loadAnimation(this, R.anim.show_stars_fab);
+        HIDE_STARS_FAB = AnimationUtils.loadAnimation(this, R.anim.hide_stars_fab);
+
         binding = DataBindingUtil.setContentView(this, R.layout.home_activity);
         binding.setListViewState(ListViewState.EMPTY);
+        binding.setHandler(this);
 
         if (savedInstanceState != null) {
             searchKeyword = savedInstanceState.getString(KEYWORD_KEY);
         }
+
 
         initToolbar();
         initRecyclerView();
@@ -117,6 +139,11 @@ public class HomeActivity extends AppCompatActivity implements IHomeView, TouchH
         binding.repos.addOnScrollListener(new EndlessScrollListener(layoutManager, page ->
                 getRepos(searchKeyword, page)));
 
+        binding.repos.setOnTouchListener((v, event) -> {
+            if (fabExpanded) switchSortOptions();
+            return false;
+        });
+
         ItemTouchHelper.Callback callback = new TouchHelper(this);
         ItemTouchHelper helper = new ItemTouchHelper(callback);
         helper.attachToRecyclerView(binding.repos);
@@ -147,15 +174,51 @@ public class HomeActivity extends AppCompatActivity implements IHomeView, TouchH
     }
 
     @Override
+    public void switchSortOptions() {
+        int multiplier = fabExpanded ? -1 : 1;
+
+        binding.sizeFab.setFromXDelta(getDimen(R.dimen.size_fab_show_from_x_delta) * multiplier);
+        binding.sizeFab.setFromYDelta(getDimen(R.dimen.size_fab_show_from_y_delta) * multiplier);
+        binding.sizeFab.fab.startAnimation(fabExpanded ? HIDE_SIZE_FAB : SHOW_SIZE_FAB);
+
+        binding.forksFab.setFromXDelta(getDimen(R.dimen.forks_fab_show_from_x_delta) * multiplier);
+        binding.forksFab.setFromYDelta(getDimen(R.dimen.forks_fab_show_from_y_delta) * multiplier);
+        binding.forksFab.fab.startAnimation(fabExpanded ? HIDE_FORKS_FAB : SHOW_FORKS_FAB);
+
+        binding.starsFab.setFromXDelta(getDimen(R.dimen.stars_fab_show_from_x_delta) * multiplier);
+        binding.starsFab.setFromYDelta(getDimen(R.dimen.stars_fab_show_from_y_delta) * multiplier);
+        binding.starsFab.fab.startAnimation(fabExpanded ? HIDE_STARS_FAB : SHOW_STARS_FAB);
+
+        fabExpanded = !fabExpanded;
+    }
+
+    @Override
+    public void sortBySize() {
+        adapter.setSortOption(SortOption.SIZE);
+        switchSortOptions();
+    }
+
+    @Override
+    public void sortByForks() {
+        adapter.setSortOption(SortOption.FORKS);
+        switchSortOptions();
+    }
+
+    @Override
+    public void sortByStars() {
+        adapter.setSortOption(SortOption.STARS);
+        switchSortOptions();
+    }
+
+    @Override
     public void showRepos(List<Repo> repos) {
         binding.setListViewState(ListViewState.FILLED);
         adapter.setRepos(repos);
     }
 
     @Override
-    public void showMoreRepos(List<Repo> repos) {
-        binding.setListViewState(ListViewState.FILLED);
-        adapter.addRepos(repos);
+    public void sortRepos() {
+        adapter.sortRepos();
     }
 
     @Override
@@ -189,6 +252,10 @@ public class HomeActivity extends AppCompatActivity implements IHomeView, TouchH
         Snackbar.make(binding.getRoot(), error, Snackbar.LENGTH_LONG).show();
     }
 
+    private float getDimen(int fractionId) {
+        return getResources().getFraction(fractionId, 1, 1);
+    }
+
     private SearchView.OnQueryTextListener queryTextListener = new SearchView.OnQueryTextListener() {
         @Override
         public boolean onQueryTextSubmit(String query) {
@@ -198,7 +265,7 @@ public class HomeActivity extends AppCompatActivity implements IHomeView, TouchH
         @Override
         public boolean onQueryTextChange(String newText) {
             searchKeyword = newText;
-            getRepos(searchKeyword, HomePresenter.FIRST_PAGE);
+            getRepos(searchKeyword, HomePresenter.DEFAULT_PAGE);
             return true;
         }
     };

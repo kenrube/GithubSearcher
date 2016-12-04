@@ -6,9 +6,15 @@
 
     <data>
 
+        <import type="org.odddev.githubsearcher.home.repo.SortOption"/>
+
         <variable
             name="repo"
             type="org.odddev.githubsearcher.home.repo.Repo"/>
+
+        <variable
+            name="sortOption"
+            type="int"/>
 
     </data>
 
@@ -40,8 +46,8 @@
             android:text="@{repo.fullName}"
             android:textSize="@dimen/text_medium"
             app:font="@{@string/roboto_medium}"
-            app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent"/>
 
         <TextView
@@ -51,11 +57,11 @@
             android:layout_marginStart="@dimen/spacing_large"
             android:ellipsize="end"
             android:maxLines="2"
-            android:text="@{repo.description}"
+            android:text="@{sortOption == SortOption.SIZE ? @string/repo_size(repo.size) : (sortOption == SortOption.FORKS ? @plurals/repo_forks(repo.forksCount, repo.forksCount) : (sortOption == SortOption.STARS ? @plurals/repo_stars(repo.stargazersCount, repo.stargazersCount) : repo.description))}"
             android:textSize="@dimen/text_medial"
             app:font="@{@string/roboto_regular}"
-            app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@id/repo_name"/>
 
     </android.support.constraint.ConstraintLayout>

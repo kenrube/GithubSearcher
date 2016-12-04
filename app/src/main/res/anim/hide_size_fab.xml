@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="utf-8"?>
+<set xmlns:android="http://schemas.android.com/apk/res/android"
+     android:fillAfter="true">
+
+    <!-- Move -->
+    <translate
+        android:duration="@dimen/translation_duration"
+        android:fromXDelta="@dimen/size_fab_hide_from_x_delta"
+        android:fromYDelta="@dimen/size_fab_hide_from_y_delta"
+        android:interpolator="@android:anim/linear_interpolator"
+        android:toXDelta="@dimen/hide_to_x_delta"
+        android:toYDelta="@dimen/hide_to_y_delta"/>
+
+    <!-- Fade Out -->
+    <alpha
+        android:duration="@dimen/fade_duration"
+        android:fromAlpha="@dimen/hide_from_alpha"
+        android:interpolator="@android:anim/accelerate_interpolator"
+        android:toAlpha="@dimen/hide_to_alpha"/>
+
+</set>

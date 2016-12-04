@@ -1,0 +1,46 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <!-- Common animation dimens -->
+    <item name="rotation_duration" format="integer" type="dimen">250</item>
+    <item name="translation_duration" format="integer" type="dimen">500</item>
+    <item name="fade_duration" format="integer" type="dimen">1000</item>
+
+    <item name="from_degrees" format="integer" type="dimen">30</item>
+    <item name="to_degrees" format="integer" type="dimen">0</item>
+    <item name="rotation_repeat_count" format="integer" type="dimen">4</item>
+    <item name="pivot_x" format="fraction" type="dimen">50%</item>
+    <item name="pivot_y" format="fraction" type="dimen">50%</item>
+
+    <item name="show_to_x_delta" format="fraction" type="dimen">0%</item>
+    <item name="show_to_y_delta" format="fraction" type="dimen">0%</item>
+    <item name="show_from_alpha" format="float" type="dimen">0.0</item>
+    <item name="show_to_alpha" format="float" type="dimen">1.0</item>
+
+    <item name="hide_to_x_delta" format="fraction" type="dimen">-0%</item>
+    <item name="hide_to_y_delta" format="fraction" type="dimen">-0%</item>
+    <item name="hide_from_alpha" format="float" type="dimen">1.0</item>
+    <item name="hide_to_alpha" format="float" type="dimen">0.0</item>
+
+    <!-- Size Fab animation dimens -->
+    <item name="size_fab_show_from_x_delta" format="fraction" type="dimen">120%</item>
+    <item name="size_fab_show_from_y_delta" format="fraction" type="dimen">0%</item>
+
+    <item name="size_fab_hide_from_x_delta" format="fraction" type="dimen">-120%</item>
+    <item name="size_fab_hide_from_y_delta" format="fraction" type="dimen">-0%</item>
+
+    <!-- Forks Fab animation dimens -->
+    <item name="forks_fab_show_from_x_delta" format="fraction" type="dimen">120%</item>
+    <item name="forks_fab_show_from_y_delta" format="fraction" type="dimen">120%</item>
+
+    <item name="forks_fab_hide_from_x_delta" format="fraction" type="dimen">-120%</item>
+    <item name="forks_fab_hide_from_y_delta" format="fraction" type="dimen">-120%</item>
+
+    <!-- Stars Fab animation dimens -->
+    <item name="stars_fab_show_from_x_delta" format="fraction" type="dimen">0%</item>
+    <item name="stars_fab_show_from_y_delta" format="fraction" type="dimen">120%</item>
+
+    <item name="stars_fab_hide_from_x_delta" format="fraction" type="dimen">-0%</item>
+    <item name="stars_fab_hide_from_y_delta" format="fraction" type="dimen">-120%</item>
+
+</resources>

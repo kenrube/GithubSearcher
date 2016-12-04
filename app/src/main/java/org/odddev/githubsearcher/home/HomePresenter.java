@@ -26,7 +26,7 @@ import timber.log.Timber;
 
 public class HomePresenter extends Presenter<IHomeView> {
 
-    static final int FIRST_PAGE = 1;
+    static final int DEFAULT_PAGE = 1;
 
     private List<Repo> repos;
     private String keyword;
@@ -56,7 +56,7 @@ public class HomePresenter extends Presenter<IHomeView> {
         if (repos != null) {
             showRepos(repos);
         } else if (!TextUtils.isEmpty(keyword)) {
-            getRepos(keyword, FIRST_PAGE);
+            getRepos(keyword, DEFAULT_PAGE);
         }
     }
 
@@ -69,12 +69,13 @@ public class HomePresenter extends Presenter<IHomeView> {
         getReposSubscription = provider.getRepos(keyword, page)
                 .subscribe(
                         repos -> {
-                            this.repos = repos;
-                            if (page == FIRST_PAGE) {
-                                showRepos(repos);
+                            if (page == DEFAULT_PAGE) {
+                                this.repos = repos;
                             } else {
-                                showMoreRepos(repos);
+                                this.repos.addAll(repos);
                             }
+                            showRepos(this.repos);
+                            sortRepos();
                         },
                         throwable -> {
                             Timber.e(throwable, throwable.getLocalizedMessage());
@@ -106,9 +107,9 @@ public class HomePresenter extends Presenter<IHomeView> {
         }
     }
 
-    private void showMoreRepos(List<Repo> repos) {
+    private void sortRepos() {
         for (IHomeView view : getViews()) {
-            view.showMoreRepos(repos);
+            view.sortRepos();
         }
     }
 

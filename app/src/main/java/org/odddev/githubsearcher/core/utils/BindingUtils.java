@@ -5,7 +5,9 @@ import android.databinding.BindingConversion;
 import android.graphics.Typeface;
 import android.graphics.drawable.Drawable;
 import android.os.Build;
+import android.support.design.widget.FloatingActionButton;
 import android.view.View;
+import android.widget.FrameLayout;
 import android.widget.ImageView;
 import android.widget.TextView;
 
@@ -22,6 +24,11 @@ import org.odddev.githubsearcher.R;
 public class BindingUtils {
 
     private BindingUtils() {
+    }
+
+    @BindingAdapter("onClick")
+    public static void bindOnClick(View view, final Runnable runnable) {
+        view.setOnClickListener(v -> runnable.run());
     }
 
     @BindingAdapter({"srcUri", "isCircle", "placeholder"})
@@ -47,6 +54,17 @@ public class BindingUtils {
         } else {
             textView.setTypeface(Typeface.create(fontName, Typeface.NORMAL));
         }
+    }
+
+    @BindingAdapter({"fromXDelta", "fromYDelta"})
+    public static void bindFabLayoutParams(FloatingActionButton fab, final double fromXDelta,
+                                           final double fromYDelta) {
+        FrameLayout.LayoutParams layoutParams = (FrameLayout.LayoutParams) fab.getLayoutParams();
+        layoutParams.rightMargin += (int) (fab.getWidth() * fromXDelta);
+        layoutParams.bottomMargin += (int) (fab.getHeight() * fromYDelta);
+        fab.setLayoutParams(layoutParams);
+
+        fab.setClickable(fromXDelta > 0);
     }
 
     @BindingConversion

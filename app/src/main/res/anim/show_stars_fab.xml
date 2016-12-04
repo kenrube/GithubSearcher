@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="utf-8"?>
+<set xmlns:android="http://schemas.android.com/apk/res/android"
+     android:fillAfter="true">
+
+    <!-- Rotate -->
+    <rotate
+        android:duration="@dimen/rotation_duration"
+        android:fromDegrees="@dimen/from_degrees"
+        android:interpolator="@android:anim/linear_interpolator"
+        android:pivotX="@dimen/pivot_x"
+        android:pivotY="@dimen/pivot_y"
+        android:repeatCount="@dimen/rotation_repeat_count"
+        android:repeatMode="reverse"
+        android:toDegrees="@dimen/to_degrees"/>
+
+    <!-- Move -->
+    <translate
+        android:duration="@dimen/translation_duration"
+        android:fromXDelta="@dimen/stars_fab_show_from_x_delta"
+        android:fromYDelta="@dimen/stars_fab_show_from_y_delta"
+        android:interpolator="@android:anim/linear_interpolator"
+        android:toXDelta="@dimen/show_to_x_delta"
+        android:toYDelta="@dimen/show_to_y_delta"/>
+
+    <!-- Fade In -->
+    <alpha
+        android:duration="@dimen/fade_duration"
+        android:fromAlpha="@dimen/show_from_alpha"
+        android:interpolator="@android:anim/decelerate_interpolator"
+        android:toAlpha="@dimen/show_to_alpha"/>
+
+</set>

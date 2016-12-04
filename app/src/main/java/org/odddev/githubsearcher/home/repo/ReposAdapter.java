@@ -21,9 +21,11 @@ import java.util.List;
 public class ReposAdapter extends RecyclerView.Adapter<ReposAdapter.RepoViewHolder> {
 
     private List<Repo> repos;
+    private @SortOption int sortOption;
 
     public ReposAdapter() {
         repos = new ArrayList<>();
+        sortOption = SortOption.DEFAULT;
     }
 
     @Override
@@ -35,6 +37,7 @@ public class ReposAdapter extends RecyclerView.Adapter<ReposAdapter.RepoViewHold
     @Override
     public void onBindViewHolder(RepoViewHolder holder, int position) {
         holder.binding.setRepo(repos.get(position));
+        holder.binding.setSortOption(sortOption);
     }
 
     @Override
@@ -42,23 +45,43 @@ public class ReposAdapter extends RecyclerView.Adapter<ReposAdapter.RepoViewHold
         return repos.size();
     }
 
+    public void setSortOption(@SortOption int sortOption) {
+        this.sortOption = sortOption;
+        switch (this.sortOption) {
+            case SortOption.SIZE: {
+                Collections.sort(repos,
+                        (lhs, rhs) -> rhs.getSize().compareTo(lhs.getSize()));
+                notifyDataSetChanged();
+                break;
+            }
+            case SortOption.FORKS: {
+                Collections.sort(repos,
+                        (lhs, rhs) -> rhs.getForksCount().compareTo(lhs.getForksCount()));
+                notifyDataSetChanged();
+                break;
+            }
+            case SortOption.STARS: {
+                Collections.sort(repos,
+                        (lhs, rhs) -> rhs.getStargazersCount().compareTo(lhs.getStargazersCount()));
+                notifyDataSetChanged();
+                break;
+            }
+            case SortOption.DEFAULT:
+            default: {
+                break;
+            }
+        }
+    }
+
+    public void sortRepos() {
+        setSortOption(sortOption);
+    }
+
     public void setRepos(List<Repo> repos) {
         ReposDiffCallback diffCallback = new ReposDiffCallback(this.repos, repos);
         DiffUtil.DiffResult diffResult = DiffUtil.calculateDiff(diffCallback);
 
         this.repos = repos;
-        diffResult.dispatchUpdatesTo(this);
-    }
-
-    public void addRepos(List<Repo> repos) {
-        List<Repo> temp = new ArrayList<>();
-        temp.addAll(this.repos);
-        temp.addAll(repos);
-
-        ReposDiffCallback diffCallback = new ReposDiffCallback(this.repos, temp);
-        DiffUtil.DiffResult diffResult = DiffUtil.calculateDiff(diffCallback);
-
-        this.repos = temp;
         diffResult.dispatchUpdatesTo(this);
     }
 

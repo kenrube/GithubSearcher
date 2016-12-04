@@ -10,6 +10,23 @@
     <string name="home.search.empty">Как пуст сей свод!\nНачните ввод</string>
     <string name="home.connection.on">Включить</string>
 
+    <!-- Repo -->
+    <string name="repo.size">%d kb</string>
+
+    <plurals name="repo_forks">
+        <item quantity="one">%1$d fork</item>
+        <item quantity="few">%1$d forks</item>
+        <item quantity="many">%1$d forks</item>
+        <item quantity="other">%1$d forks</item>
+    </plurals>
+
+    <plurals name="repo_stars">
+        <item quantity="one">%1$d star</item>
+        <item quantity="few">%1$d stars</item>
+        <item quantity="many">%1$d stars</item>
+        <item quantity="other">%1$d stars</item>
+    </plurals>
+
     <!-- Errors -->
     <string name="error.connection">Нет подключения к Интернету</string>
 

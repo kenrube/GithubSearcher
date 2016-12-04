@@ -11,6 +11,10 @@
             name="listViewState"
             type="int"/>
 
+        <variable
+            name="handler"
+            type="org.odddev.githubsearcher.home.IHomeActionsHandler"/>
+
     </data>
 
     <android.support.design.widget.CoordinatorLayout
@@ -43,17 +47,49 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_gravity="center"
-            android:text="@string/home.search.empty"
             android:gravity="center"
-            app:font="@{@string/roboto_medium}"
+            android:text="@string/home.search.empty"
             android:textSize="@dimen/text_medium"
-            android:visibility="@{listViewState == ListViewState.EMPTY}"/>
+            android:visibility="@{listViewState == ListViewState.EMPTY}"
+            app:font="@{@string/roboto_medium}"/>
 
         <ProgressBar
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_gravity="center"
             android:visibility="@{listViewState == ListViewState.LOADING}"/>
+
+        <android.support.design.widget.FloatingActionButton
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="bottom|end"
+            android:layout_margin="@dimen/spacing_medium"
+            android:src="@drawable/ic_sort_white_24dp"
+            app:layout_behavior="org.odddev.githubsearcher.core.behavior.FabFloatOnScrollBehavior"
+            app:onClick="@{handler::switchSortOptions}"
+            app:useCompatPadding="true"/>
+
+        <FrameLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_margin="@dimen/spacing_small">
+
+            <include
+                android:id="@+id/size_fab"
+                layout="@layout/size_fab_layout"
+                app:handler="@{handler}"/>
+
+            <include
+                android:id="@+id/forks_fab"
+                layout="@layout/forks_fab_layout"
+                app:handler="@{handler}"/>
+
+            <include
+                android:id="@+id/stars_fab"
+                layout="@layout/stars_fab_layout"
+                app:handler="@{handler}"/>
+
+        </FrameLayout>
 
     </android.support.design.widget.CoordinatorLayout>
 
